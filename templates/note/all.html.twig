@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All public notes{% endblock %}
+
+{% block body %}
+    <h1>All public notes</h1>
+    {% for item in allNotes %}
+    {{dump(item)}}
+    <a href="{{path('app_note_show',{'slug': item.slug})}}">Show</a>
+    {% endfor %}
+{% endblock %}
+

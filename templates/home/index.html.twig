@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Homepage
+{% endblock %}
+
+{% block body %}
+	<header>
+		<h1>Lorem ipsum dolor sit amet, consectetur adipis</h1>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel sapien vel neque rutrum consectetur.</p>
+
+	</header>
+	<div class="">
+		<h3>Lorem ipsum dolor sit amet</h3>
+		<p>there are
+			{{lastNotes|length}}
+			public notes on CodeXpress</p>
+		<div class="">
+			{% for item in lastNotes %}
+				<div class="">
+					{{item.title}}
+					{% for category in item.category %}
+						{{category.title}}
+					{% endfor %}
+					<a href="{{path('app_note_show', {'slug': item.slug}) }}">check it</a>
+				</div>
+			{% endfor %}
+			{{dump(lastNotes)}}
+		{% endblock %}
