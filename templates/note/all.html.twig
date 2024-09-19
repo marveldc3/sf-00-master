@@ -3,10 +3,16 @@
 {% block title %}All public notes{% endblock %}
 
 {% block body %}
-    <h1>All public notes</h1>
-    {% for item in allNotes %}
-    {{dump(item)}}
-    <a href="{{path('app_note_show',{'slug': item.slug})}}">Show</a>
-    {% endfor %}
+    <header class="bg-gradient-to-r from-violet-100 via-slate-100 to-indigo-100 py-5 md:py-16">
+        <div class="px-4 sm:max-w-screen-sm md:max-w-screen-lg mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold">Discover all public notes</h1>
+            <p class="mb-4">Find out what's new on CodeXpress</p>
+        </div>
+    </header>
+    <main class="max-w-screen-lg mx-auto py-5 md:py-16 px-4">
+        {{ include('components/notes-list.html.twig') }}
+    </main>
+     <div class="px-4 pb-6 md:pb-16 text-center">
+        {{ knp_pagination_render(allNotes) }}
+    </div> 
 {% endblock %}
-

@@ -16,4 +16,7 @@ return [
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     Symfonycasts\TailwindBundle\SymfonycastsTailwindBundle::class => ['all' => true],
     Symfony\UX\Icons\UXIconsBundle::class => ['all' => true],
+    SymfonyCasts\Bundle\VerifyEmail\SymfonyCastsVerifyEmailBundle::class => ['all' => true],
+    Symfony\UX\Dropzone\DropzoneBundle::class => ['all' => true],
+    Knp\Bundle\PaginatorBundle\KnpPaginatorBundle::class => ['all' => true],
 ];

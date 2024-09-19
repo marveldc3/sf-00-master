@@ -1,0 +1,17 @@
+{#  Template when the user is logged in #}
+
+<a href="{{ path('app_search') }}" class="p-2 rounded-md bg-slate-200 md:hidden">
+    {{ ux_icon('mdi:search', { 'class': 'h-6 w-6 text-neutral-600 hover:text-violet-600' }) }}
+</a>
+<a href="{{ path('app_note_all')}}" data-tooltip="All notes" class="p-2 rounded-md bg-slate-200">
+    {{ ux_icon('mdi:archive-outline', { 'class': 'h-6 w-6 text-neutral-600 hover:text-violet-600' }) }}
+</a>
+<a href="{{ path('app_note_new')}}" class="p-2 rounded-md bg-slate-200">
+    {{ ux_icon('mdi:plus-box-outline', { 'class': 'h-6 w-6 text-neutral-600 hover:text-violet-600' }) }}
+</a>
+<a href="{{ path('app_profile_edit')}}" class="p-2 rounded-md bg-slate-200">
+    {{ ux_icon('mdi:cog-outline', { 'class': 'h-6 w-6 text-neutral-600 hover:text-violet-600' }) }}
+</a>
+<a href="{{ path('app_note_user', { 'username': app.user.username })}}" class="shadow-md rounded-full hover:scale-95 transition-transform duration-200 ease-in-out">
+    <img src="{{ '/images/uploads/' ~ app.user.image ?? 'default.png' }}" alt="logo" width="48" class="rounded-full">
+</a>

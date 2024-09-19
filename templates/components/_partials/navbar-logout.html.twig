@@ -1,0 +1,11 @@
+{#  Template when the user is logged out #}
+
+<a href="{{ path('app_note_all')}}" data-tooltip="All notes" class="p-2 rounded-md bg-slate-200">
+    {{ ux_icon('mdi:archive-outline', { 'class': 'h-6 w-6 text-neutral-600 hover:text-violet-600' }) }}
+</a>
+<a href="{{ path('app_login')}}" data-tooltip="Login" class="p-2 rounded-md bg-slate-200">
+    {{ ux_icon('mdi:user', { 'class': 'h-6 w-6 text-neutral-600 hover:text-violet-600' }) }}
+</a>
+<a href="{{ path('app_register')}}" data-tooltip="Register" class="p-2 rounded-md bg-slate-200">
+    {{ ux_icon('mdi:register-outline', { 'class': 'h-6 w-6 text-neutral-600 hover:text-violet-600' }) }}
+</a>

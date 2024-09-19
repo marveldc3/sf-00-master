@@ -1,28 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Homepage
+{% block title %}
+    Homepage
 {% endblock %}
 
 {% block body %}
-	<header>
-		<h1>Lorem ipsum dolor sit amet, consectetur adipis</h1>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel sapien vel neque rutrum consectetur.</p>
-
+	<header class="bg-gradient-to-r from-violet-100 via-slate-100 to-indigo-100 py-5 md:py-16">
+		<div class="px-4 sm:max-w-screen-sm md:max-w-screen-lg mx-auto">
+			<h1 class="text-4xl md:text-5xl font-bold">Stop wasting time on Google search</h1>
+			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque tenetur quibusdam maxime quaerat odit soluta doloremque, voluptate adipisci pariatur, quae eos dolor ratione voluptatibus architecto laborum? Distinctio et fugit iusto!</p>
+		</div>
 	</header>
-	<div class="">
-		<h3>Lorem ipsum dolor sit amet</h3>
-		<p>there are
-			{{lastNotes|length}}
-			public notes on CodeXpress</p>
-		<div class="">
+	<main class="max-w-screen-lg mx-auto py-5 md:py-16 px-4">
+		<h3 class="text-violet-950">
+			{{ ux_icon('mdi:calendar', { 'class': 'h-5 w-5 text-violet-950 mr-1 inline-block' }) }}
+			Recent notes
+		</h3>
+		<p class="mb-4">There are curently {{ totalNotes }} notes shared on CodeXpress</p>
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 			{% for item in lastNotes %}
-				<div class="">
-					{{item.title}}
-					{% for category in item.category %}
-						{{category.title}}
-					{% endfor %}
-					<a href="{{path('app_note_show', {'slug': item.slug}) }}">check it</a>
+				<div class="shadow-lg rounded-md p-4 md:p-6 mb-4 flex flex-col border">
+					<h5 class="mb-1">{{ item.title|slice(0,40) }}...</h5>
+					<p class="text-slate-600 mb-2 text-sm">{{ item.content|slice(0,100) }}...</p>
+					<div class="flex justify-between">
+						<p class="text-slate-600 mb-2">
+							<img src="{{ item.category.icon }}" alt="{{ item.category.title }}" class="inline-block h-7 w-7 mr-2">
+						</p>
+						<a href="{{ path('app_note_show', {'slug': item.slug}) }}" class="bg-violet-100 rounded-md py-2 px-3 text-sm hover:bg-violet-200 self-end w-fit transition-all duration-200 ease-in-out">
+							check it
+						</a>
+					</div>
 				</div>
 			{% endfor %}
-			{{dump(lastNotes)}}
-		{% endblock %}
+		</div>
+		{% include 'components/cta.html.twig' %}
+	</main>
+
+{% endblock %}

@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Entity\Note;
 use App\Entity\Network;
 use App\Entity\Like;
+use App\Entity\View;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -28,10 +29,13 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        // Categories
+       
         $categories = [
             'HTML' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-plain.svg',
-            // ... (autres catégories)
+            'CSS' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-plain.svg',
+            'JavaScript' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-plain.svg',
+            'PHP' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-plain.svg',
+            'SQL' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-plain.svg',
         ];
         $categoryEntities = [];
         foreach ($categories as $title => $icon) {
@@ -41,68 +45,76 @@ class AppFixtures extends Fixture
             $manager->persist($category);
         }
 
-        // Users
+       
         $users = [];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $user = new User();
             $username = $faker->userName;
             $user->setEmail($this->slugger->slug($username) . '@' . $faker->freeEmailDomain())
-                 ->setUsername($username)
-                 ->setPassword($this->hasher->hashPassword($user, 'password'))
-                 ->setRoles(['ROLE_USER'])
-                 ->setCreatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 year')->format('Y-m-d H:i:s')))
-                 ->setUpdatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 month')->format('Y-m-d H:i:s')));
-            
-            // Ajout de l'image de profil (nouvelle propriété)
-            $user->setImage($faker->imageUrl(640, 480, 'people'));
-            
+                ->setUsername($username)
+                ->setPassword($this->hasher->hashPassword($user, 'password'))
+                ->setRoles(['ROLE_USER'])
+                ->setCreatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 year')->format('Y-m-d H:i:s')))
+                ->setUpdatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 month')->format('Y-m-d H:i:s')))
+                ->setImage('https://avatar.iran.liara.run/public/' . $i);
+
             $users[] = $user;
             $manager->persist($user);
         }
 
-        // Notes
+     
         $notes = [];
         foreach ($users as $user) {
-            for ($j = 0; $j < 10; $j++) {
+            for ($j = 0; $j < 3; $j++) {
                 $note = new Note();
-                $title = $faker->sentence();
+                $title = $faker->sentence(4); 
                 $note->setTitle($title)
-                     ->setSlug($this->slugger->slug($title))
-                     ->setContent($faker->paragraphs(4, true))
-                     ->setPublic($faker->boolean())
-                     ->setViews($faker->numberBetween(100, 1000))
-                     ->setAuthor($user)
-                     ->setCategory($faker->randomElement($categoryEntities))
-                     ->setCreatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 year')->format('Y-m-d H:i:s')))
-                     ->setUpdatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 month')->format('Y-m-d H:i:s')));
-                
+                    ->setSlug($this->slugger->slug($title))
+                    ->setContent($faker->paragraph(3))
+                    ->setIsPublic($faker->boolean())
+                    ->setCreator($user)
+                    ->setCategory($faker->randomElement($categoryEntities))
+                    ->setCreatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 year')->format('Y-m-d H:i:s')))
+                    ->setUpdatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 month')->format('Y-m-d H:i:s')));
+
                 $notes[] = $note;
                 $manager->persist($note);
+
+            
+                $viewCount = $faker->numberBetween(1, 10);
+                for ($k = 0; $k < $viewCount; $k++) {
+                    $view = new View();
+                    $view->setIpAdress($faker->ipv4)
+                        ->setCreatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 month')->format('Y-m-d H:i:s')))
+                        ->setUpdatedAt(new \DateTimeImmutable($faker->dateTimeBetween('-1 week')->format('Y-m-d H:i:s')))
+                        ->setNote($note);
+                    $manager->persist($view);
+                }
             }
         }
 
-        // Likes
+       
         foreach ($notes as $note) {
-            $likeCount = $faker->numberBetween(0, 20);
+            $likeCount = $faker->numberBetween(0, 3);
             for ($k = 0; $k < $likeCount; $k++) {
                 $like = new Like();
                 $like->setNote($note)
-                     ->setCreator($faker->randomElement($users));
+                    ->setCreator($faker->randomElement($users));
                 $manager->persist($like);
             }
         }
 
-        // Networks
+     
         $networkTypes = ['Twitter', 'LinkedIn', 'GitHub', 'Facebook'];
         foreach ($users as $user) {
-            foreach ($networkTypes as $type) {
-                if ($faker->boolean(70)) {  // 70% chance to have this network
-                    $network = new Network();
-                    $network->setName($type)
-                            ->setUrl($faker->url)
-                            ->setCreator($user);
-                    $manager->persist($network);
-                }
+            $networkCount = $faker->numberBetween(0, 2);
+            $shuffledNetworks = $faker->shuffleArray($networkTypes);
+            for ($i = 0; $i < $networkCount; $i++) {
+                $network = new Network();
+                $network->setName($shuffledNetworks[$i])
+                    ->setUrl($faker->url)
+                    ->setCreator($user);
+                $manager->persist($network);
             }
         }
 
